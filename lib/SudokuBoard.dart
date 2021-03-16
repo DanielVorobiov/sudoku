@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sudoku/Solver.dart';
 import 'package:sudoku/SudokuCell.dart';
 
 class SudokuBoard extends StatelessWidget {
@@ -10,18 +11,20 @@ class SudokuBoard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Table(
-            border: TableBorder(
-              left: BorderSide(width: 3, color: Colors.black),
-              top: BorderSide(width: 3, color: Colors.black),
-            ),
-            defaultColumnWidth: FixedColumnWidth(40),
-            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-            children: _getTableRows()
-          ),
+              border: TableBorder(
+                left: BorderSide(width: 3, color: Colors.black),
+                top: BorderSide(width: 3, color: Colors.black),
+              ),
+              defaultColumnWidth: FixedColumnWidth(40),
+              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              children: _getTableRows()),
         ],
       ),
     );
   }
+
+
+  //List<List<dynamic>>
 
   List<TableRow> _getTableRows() {
     return List.generate(9, (int rowNumber) {
@@ -32,19 +35,14 @@ class SudokuBoard extends StatelessWidget {
   List<Widget> _getRow(int rowNumber) {
     return List.generate(9, (int colNumber) {
       return Container(
-        decoration: BoxDecoration(
-          border: Border(
+          decoration: BoxDecoration(
+              border: Border(
             right: BorderSide(
-              width: (colNumber % 3 ==2) ? 3.0 : 1.0,
-              color: Colors.black
-              
-            ),
+                width: (colNumber % 3 == 2) ? 3.0 : 1.0, color: Colors.black),
             bottom: BorderSide(
-              width: (rowNumber % 3 ==2) ? 3.0 : 1.0,
-              color: Colors.black),
-          )
-        ),  
-        child: SudokuCell(rowNumber, colNumber));
+                width: (rowNumber % 3 == 2) ? 3.0 : 1.0, color: Colors.black),
+          )),
+          child: SudokuCell(rowNumber, colNumber));
     });
   }
 }

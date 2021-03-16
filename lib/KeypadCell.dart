@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sudoku/Solver.dart';
+import 'package:sudoku/SudokuBoard.dart';
 
 class KeypadCell extends StatelessWidget {
   final int number;
@@ -13,6 +15,7 @@ class KeypadCell extends StatelessWidget {
           final String message =
               number == 0 ? "Use to clear" : 'Fill squares with $number';
           debugPrint(message);
+          
         },
         child: Text('$number'),
       ),

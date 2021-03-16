@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sudoku/ResetButtton.dart';
 import 'package:sudoku/SolveButton.dart';
 import 'package:sudoku/SudokuBoard.dart';
 import 'package:sudoku/Keypad.dart';
+import 'package:sudoku/SudokuChangeNotifier.dart';
 
 
 void main() {
@@ -17,7 +19,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Scaffold(
+      home: ChangeNotifierProvider(
+        
+        create:(context) => SudokuChangeNotifier(),
+        child: Scaffold(
           appBar: AppBar(
             title: Text("Sudoku!"),
           ),
@@ -50,6 +55,7 @@ class MyApp extends StatelessWidget {
                 ],),)
             ],
           )
-    ));
+    ),
+      ));
   }
 }
