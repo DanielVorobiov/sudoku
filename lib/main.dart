@@ -19,8 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ChangeNotifierProvider(
-        
+      home: ChangeNotifierProvider(     
         create:(context) => SudokuChangeNotifier(),
         child: Scaffold(
           appBar: AppBar(

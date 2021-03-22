@@ -18,13 +18,12 @@ class _SolveButtonState extends State<SolveButton> {
         onPressed: () {
           print("Solve Button pressed");
           Provider.of<SudokuChangeNotifier>(context, listen: false)
-              .solveBoard();
-         
+              .solveBoard();        
         },
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.blue),
             foregroundColor: MaterialStateProperty.all(Colors.white)),
-        child: Text('solve'),
+        child: Text('Solve'),
       );
     }));
   }

@@ -14,6 +14,7 @@ class SudokuChangeNotifier with ChangeNotifier {
     ["", 5, "", "", "", 1, "", "", ""],
     [9, "", 2, "", 7, 4, "", "", ""],
   ];
+  
 
   void solveBoard() {
     List<List<dynamic>> solvedBoard = solver.solveSudoku(this.board);
@@ -26,8 +27,5 @@ class SudokuChangeNotifier with ChangeNotifier {
     return this.board[row][col] == "" ? "" : this.board[row][col].toString();
   }
 
-  void setBoardCell(int row, int col) {
-    this.board[row][col] = this.board[row][col];
-    notifyListeners();
-  }
+  
 }

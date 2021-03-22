@@ -17,11 +17,6 @@ class _SudokuCellState extends State<SudokuCell> {
   Widget build(BuildContext context) {
     return InkResponse(
       enableFeedback: true,
-      onTap: () {
-        debugPrint('Setting (${widget.row}, ${widget.col}) to active_number');
-        Provider.of<SudokuChangeNotifier>(context, listen: false)
-            .setBoardCell(widget.row, widget.col);
-      },
       child: SizedBox(
         width: 48,
         height: 48,

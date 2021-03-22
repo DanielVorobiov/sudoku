@@ -11,12 +11,7 @@ class KeypadCell extends StatelessWidget {
       width: 40,
       height: 40,
       child: MaterialButton(
-        onPressed: () {
-          final String message =
-              number == 0 ? "Use to clear" : 'Fill squares with $number';
-          debugPrint(message);
-          
-        },
+        onPressed: () {},
         child: Text('$number'),
       ),
     );
