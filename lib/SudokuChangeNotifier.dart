@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sudoku/Solver.dart';
 import 'dart:math';
 import 'package:collection/collection.dart';
-import 'package:flutter_restart/flutter_restart.dart';
+
 
 class SudokuChangeNotifier with ChangeNotifier {
 
@@ -21,11 +21,9 @@ class SudokuChangeNotifier with ChangeNotifier {
 
   final solver = Solver();
   List<List<dynamic>>  eliminator(board){
-
     final random = new Random();
     solver.fillBoard(board);
-    //print(board);
-    int emptyCells = 15;
+    int emptyCells = 55;
     while(emptyCells > 0){
       int r = random.nextInt(9);
       int c = random.nextInt(9);
@@ -60,13 +58,11 @@ class SudokuChangeNotifier with ChangeNotifier {
         break;
       }
     }
-
     return temp1;
   }
 
-  void solveBoard() {
-    List<List<dynamic>> newBoard = eliminator(board);
-
+  void createBoard() {
+    eliminator(board);
     notifyListeners();
 
   }

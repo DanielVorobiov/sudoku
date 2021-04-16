@@ -19,7 +19,7 @@ class _SolveButtonState extends State<SolveButton> {
         onPressed: () {
           print("New puzzle created");
           Provider.of<SudokuChangeNotifier>(context, listen: false)
-              .solveBoard();
+              .createBoard();
         },
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.blue),
