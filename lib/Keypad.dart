@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sudoku/KeyPadCell.dart';
+import 'package:sudoku/KeypadCell.dart';
 
 class Keypad extends StatelessWidget {
   final int numRows = 2;

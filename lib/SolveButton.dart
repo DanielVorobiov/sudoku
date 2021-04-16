@@ -9,21 +9,22 @@ class SolveButton extends StatefulWidget {
 }
 
 class _SolveButtonState extends State<SolveButton> {
-  List<List<dynamic>> board;
+
+  final change = new SudokuChangeNotifier();
   @override
   Widget build(BuildContext context) {
     return (Consumer<SudokuChangeNotifier>(
         builder: (context, sudokuChangeNotifer, child) {
       return ElevatedButton(
         onPressed: () {
-          print("Solve Button pressed");
+          print("New puzzle created");
           Provider.of<SudokuChangeNotifier>(context, listen: false)
-              .solveBoard();        
+              .solveBoard();
         },
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.blue),
             foregroundColor: MaterialStateProperty.all(Colors.white)),
-        child: Text('Solve'),
+        child: Text('New Puzzle'),
       );
     }));
   }
