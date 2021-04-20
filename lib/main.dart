@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
       ),
       home: ChangeNotifierProvider(     
         create:(context) => SudokuChangeNotifier(),
+
         child: Scaffold(
           appBar: AppBar(
             title: Text("Sudoku!"),
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
                 child: SudokuBoard(),
                 ),
               Expanded(
+
                 flex:2,
                 child: Keypad()),
               Expanded(

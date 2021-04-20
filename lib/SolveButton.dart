@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sudoku/Solver.dart';
 import 'package:sudoku/SudokuChangeNotifier.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +13,7 @@ class _SolveButtonState extends State<SolveButton> {
   @override
   Widget build(BuildContext context) {
     return (Consumer<SudokuChangeNotifier>(
-        builder: (context, sudokuChangeNotifer, child) {
+        builder: (context, sudokuChangeNotifier, child) {
       return ElevatedButton(
         onPressed: () {
           print("New puzzle created");

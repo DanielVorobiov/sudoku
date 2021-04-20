@@ -18,7 +18,8 @@ class SudokuChangeNotifier with ChangeNotifier {
     ["", "", "", "", "", "", "", "", ""],
     ["", "", "", "", "", "", "", "", ""],
   ];
-
+  List<List<dynamic>> untouchables =[];
+  dynamic selectedNumber = 0;
   final solver = Solver();
   List<List<dynamic>>  eliminator(board){
     final random = new Random();
@@ -63,14 +64,66 @@ class SudokuChangeNotifier with ChangeNotifier {
 
   void createBoard() {
     eliminator(board);
+    untouchables.clear();
+    for (int r = 0; r < 9; r++) {
+      for (int c = 0; c < 9; c++) {
+        if (board[r][c] != "") {
+          untouchables.add([r, c]);
+        }
+      }
+    }
+    print(untouchables);
     notifyListeners();
 
   }
 
   String getBoardCell(int row, int col) {
-
     return this.board[row][col] == "" ? "" : this.board[row][col].toString();
+
+  }
+  
+  bool checkUntouchable(int row, int col){
+    bool result;
+    List<bool> results = [];
+    List<int> selectedCell = [row,col];
+    for (List element in untouchables) {
+      if (DeepCollectionEquality().equals(element, selectedCell) == true) {
+        results.add(true);
+      } else {
+        results.add(false);
+      }
+      if(results.contains(true) == false){
+        result =  true;
+      } else {
+        result = false;
+      }
+    }
+    return result;
+  }
+  void printNumber(dynamic number){
+    print(number.toString() + " was pressed");
+    this.selectedNumber = number;
+    if(selectedNumber == 0){
+      selectedNumber = "";
+    }
+    print(selectedNumber);
+  }
+  void resetBoard() {
+    for (int r = 0; r < 9; r++) {
+      for (int c = 0; c < 9; c++) {
+        if (checkUntouchable(r, c) == true) {
+          board[r][c] = "";
+          notifyListeners();
+        }
+      }
+    }
   }
 
-  
+  void selectBoardCell(int row, int col){
+
+     if(checkUntouchable(row,col) == true ){
+      this.board[row][col] = selectedNumber;
+      notifyListeners();}
+
+  }
 }
