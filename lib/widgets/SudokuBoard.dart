@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:sudoku/Solver.dart';
-import 'package:sudoku/SudokuCell.dart';
+import 'package:sudoku/logic/Solver.dart';
+import 'package:sudoku/widgets/SudokuCell.dart';
 
 class SudokuBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Table(
-              border: TableBorder(
-                left: BorderSide(width: 3, color: Colors.black),
-                top: BorderSide(width: 3, color: Colors.black),
-              ),
-              defaultColumnWidth: FixedColumnWidth(40),
-              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-              children: _getTableRows()),
-        ],
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Table(
+            border: TableBorder(
+              left: BorderSide(width: 3, color: Colors.black),
+              top: BorderSide(width: 3, color: Colors.black),
+            ),
+            defaultColumnWidth: FixedColumnWidth(40),
+            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+            children: _getTableRows()),
+      ],
     );
   }
 

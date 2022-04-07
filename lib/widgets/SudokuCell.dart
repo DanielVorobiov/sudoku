@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sudoku/SudokuChangeNotifier.dart';
+import 'package:sudoku/widgets/SudokuChangeNotifier.dart';
 import 'package:provider/provider.dart';
 
 
