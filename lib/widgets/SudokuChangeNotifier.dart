@@ -76,6 +76,12 @@ class SudokuChangeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  void createPuzzle() {
+    board = board;
+    untouchables.clear();
+    notifyListeners();
+  }
+
   String getBoardCell(int row, int col) {
     return this.board[row][col] == "" ? "" : this.board[row][col].toString();
   }
@@ -113,20 +119,35 @@ class SudokuChangeNotifier with ChangeNotifier {
   }
 
   void resetBoard() {
+    notifyListeners();
     for (int r = 0; r < 9; r++) {
       for (int c = 0; c < 9; c++) {
         if (checkUntouchable(r, c) == true) {
-          board[r][c] = "";
           notifyListeners();
         }
       }
     }
   }
 
-  void selectBoardCell(int row, int col) {
-    if (checkUntouchable(row, col) == true) {
+  void selectBoardCell(int row, int col, bool creator) {
+    print('selectBoardcell');
+    if (checkUntouchable(row, col) == true && creator == false) {
       this.board[row][col] = selectedNumber;
       notifyListeners();
+    }
+
+    if (creator) {
+      this.board[row][col] = selectedNumber;
+      notifyListeners();
+    }
+  }
+
+  void clearBoard() {
+    for (int r = 0; r < 9; r++) {
+      for (int c = 0; c < 9; c++) {
+        board[r][c] = "";
+        notifyListeners();
+      }
     }
   }
 }

@@ -18,6 +18,12 @@ const kBodyText1Black = TextStyle(
     fontWeight: FontWeight.w600,
     fontSize: 14);
 
+const kHintText = TextStyle(
+  color: Color(0xFF57636C),
+  fontFamily: kFontFamily,
+  fontSize: 14,
+);
+
 const kButtonText1 = TextStyle(
     color: Colors.white,
     fontFamily: kFontFamily,
@@ -25,16 +31,19 @@ const kButtonText1 = TextStyle(
     fontSize: 16);
 
 const kStatsHeaderText = TextStyle(
-  fontFamily: kFontFamily,
-  fontWeight: FontWeight.w600,
-  fontSize: 20
-);
+    fontFamily: kFontFamily, fontWeight: FontWeight.w600, fontSize: 20);
 
 const kStatsBodyText = TextStyle(
+    fontFamily: kFontFamily,
+    fontWeight: FontWeight.w600,
+    fontSize: 14,
+    color: kPrimaryColor);
+
+const kDialogText = TextStyle(
   fontFamily: kFontFamily,
-  fontWeight: FontWeight.w600,
+  fontWeight: FontWeight.w400,
   fontSize: 14,
-  color: kPrimaryColor
+  color: kPrimaryColor,
 );
 
 final kHomeButtonStyle = ElevatedButton.styleFrom(
@@ -62,4 +71,3 @@ final kDifficultyButtonStyle = ElevatedButton.styleFrom(
     borderRadius: BorderRadius.circular(2), // <-- Radius
   ),
 );
-

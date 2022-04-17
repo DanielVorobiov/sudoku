@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sudoku/screens/CreatePuzzle.dart';
 import 'package:sudoku/screens/Game.dart';
 import 'package:sudoku/screens/GameDifficulty.dart';
 import 'package:sudoku/screens/Statistics.dart';
@@ -46,13 +47,13 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     25, 0, 50, 0),
                                 child: Text(
-                                  'Level: 0',
+                                  'Level: 2',
                                   style: kBodyText1White,
                                 ),
                               ),
                               SizedBox(
                                 child: Text(
-                                  'XP: 0',
+                                  'XP: 43',
                                   style: kBodyText1White,
                                 ),
                               ),
@@ -246,7 +247,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
           await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Container(), //game dificulty
+              builder: (context) => CreateGamePageWidget(), //game dificulty
             ),
           );
         },

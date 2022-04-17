@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sudoku/screens/Home.dart';
+import 'package:sudoku/screens/Login.dart';
 import 'package:sudoku/widgets/SudokuChangeNotifier.dart';
 
 void main() {
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
         ),
         home: ChangeNotifierProvider(
           create: (context) => SudokuChangeNotifier(),
-          child: HomePageWidget(),
+          child: LoginPageWidget(),
         ));
   }
 }

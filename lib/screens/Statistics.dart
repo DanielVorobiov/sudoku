@@ -74,7 +74,7 @@ class _StatsPageWidgetState extends State<StatsPageWidget> {
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
                       child: Text(
-                        'Level: 0',
+                        'Level: 2',
                         style: kStatsHeaderText
                       ),
                     ),
@@ -92,7 +92,7 @@ class _StatsPageWidgetState extends State<StatsPageWidget> {
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(10, 7, 0, 0),
                       child: Text(
-                        'XP: 0',
+                        'XP: 43',
                         style: kStatsHeaderText
                       ),
                     ),
@@ -136,14 +136,14 @@ class _StatsPageWidgetState extends State<StatsPageWidget> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              'Easy level: 0',
+                              'Easy level: 3',
                               style: kStatsBodyText
                             ),
                             Padding(
                               padding:
                               EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Text(
-                                'Medium level: 0',
+                                'Medium level: 2',
                                 style: kStatsBodyText
                               ),
                             ),
@@ -151,7 +151,7 @@ class _StatsPageWidgetState extends State<StatsPageWidget> {
                               padding:
                               EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Text(
-                                'Hard level: 0',
+                                'Hard level: 1',
                                 style: kStatsBodyText
                               ),
                             ),
@@ -199,14 +199,14 @@ class _StatsPageWidgetState extends State<StatsPageWidget> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              'Easy level: 0',
+                              'Easy level: 4',
                               style: kStatsBodyText
                             ),
                             Padding(
                               padding:
                               EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Text(
-                                'Medium level: 0',
+                                'Medium level: 9',
                                 style: kStatsBodyText
                               ),
                             ),
@@ -214,7 +214,7 @@ class _StatsPageWidgetState extends State<StatsPageWidget> {
                               padding:
                               EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Text(
-                                'Hard level: 0',
+                                'Hard level: 6',
                                 style: kStatsBodyText
                               ),
                             ),
@@ -262,14 +262,14 @@ class _StatsPageWidgetState extends State<StatsPageWidget> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              'Easy level: 0h',
+                              'Easy level: 1.5m',
                               style: kStatsBodyText
                             ),
                             Padding(
                               padding:
                               EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Text(
-                                'Medium level: 0h',
+                                'Medium level: 7m',
                                 style: kStatsBodyText
                               ),
                             ),
@@ -277,7 +277,7 @@ class _StatsPageWidgetState extends State<StatsPageWidget> {
                               padding:
                               EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Text(
-                                'Hard level: 0h',
+                                'Hard level: 10m',
                                 style: kStatsBodyText
                               ),
                             ),

@@ -3,6 +3,9 @@ import 'package:sudoku/logic/Solver.dart';
 import 'package:sudoku/widgets/SudokuCell.dart';
 
 class SudokuBoard extends StatelessWidget {
+  final creator;
+  SudokuBoard(this.creator);
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -39,7 +42,7 @@ class SudokuBoard extends StatelessWidget {
             bottom: BorderSide(
                 width: (rowNumber % 3 == 2) ? 3.0 : 1.0, color: Colors.black),
           )),
-          child: SudokuCell(rowNumber, colNumber));
+          child: SudokuCell(rowNumber, colNumber, creator));
     });
   }
 }
