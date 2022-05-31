@@ -1,9 +1,16 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:sudoku/logic/Solver.dart';
+import 'dart:convert';
 import 'dart:math';
+
 import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:localstorage/localstorage.dart';
+import 'package:sudoku/consts.dart';
+import 'package:sudoku/logic/Solver.dart';
 import 'package:sudoku/screens/themes.dart';
+import 'package:flutter/foundation.dart';
 
 class SudokuChangeNotifier with ChangeNotifier {
   List<List<dynamic>> board = [
@@ -18,6 +25,9 @@ class SudokuChangeNotifier with ChangeNotifier {
     ["", "", "", "", "", "", "", "", ""],
   ];
   List<List<dynamic>> untouchables = [];
+  List<List<List<dynamic>>> solutions = [];
+  bool complete = false;
+
   dynamic selectedNumber = 0;
   final solver = Solver();
 
@@ -39,7 +49,7 @@ class SudokuChangeNotifier with ChangeNotifier {
       }
     }
 
-    List<List<List<dynamic>>> solutions = [];
+    solutions = [];
     List<List<dynamic>> temp1 = solver.createBoard(board);
     temp1 = solver.solveSudoku(temp1);
     solutions.add(temp1);
@@ -91,7 +101,7 @@ class SudokuChangeNotifier with ChangeNotifier {
   }
 
   bool checkUntouchable(int row, int col) {
-    bool result;
+    bool result = false;
     List<bool> results = [];
     List<int> selectedCell = [row, col];
     for (List element in untouchables) {
@@ -119,10 +129,10 @@ class SudokuChangeNotifier with ChangeNotifier {
   }
 
   void resetBoard() {
-    notifyListeners();
     for (int r = 0; r < 9; r++) {
       for (int c = 0; c < 9; c++) {
         if (checkUntouchable(r, c) == true) {
+          board[r][c] = "";
           notifyListeners();
         }
       }
@@ -130,7 +140,6 @@ class SudokuChangeNotifier with ChangeNotifier {
   }
 
   void selectBoardCell(int row, int col, bool creator) {
-    print('selectBoardcell');
     if (checkUntouchable(row, col) == true && creator == false) {
       this.board[row][col] = selectedNumber;
       notifyListeners();
@@ -138,6 +147,7 @@ class SudokuChangeNotifier with ChangeNotifier {
 
     if (creator) {
       this.board[row][col] = selectedNumber;
+      print(board);
       notifyListeners();
     }
   }
@@ -149,5 +159,38 @@ class SudokuChangeNotifier with ChangeNotifier {
         notifyListeners();
       }
     }
+  }
+
+  bool checkComplete() {
+    print("checking if complete");
+    for (int r = 0; r < 9; r++) {
+      for (int c = 0; c < 9; c++) {
+        if (board[r][c] == "") {
+          print(solutions[0]);
+
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  bool checkCorrect() {
+    DeepCollectionEquality dc = DeepCollectionEquality();
+    bool equals = dc.equals(board, solutions[0]);
+    print(equals);
+    return equals;
+  }
+
+  void saveBoard() async {
+    LocalStorage storage = LocalStorage('localStorage');
+    final url = Uri.parse('$kUrl/sudoku/');
+    final token = storage.getItem('token');
+    await http.post(url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          "Content-type": "application/json"
+        },
+        body: jsonEncode({'puzzle': board}));
   }
 }

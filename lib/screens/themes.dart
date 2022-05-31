@@ -18,6 +18,12 @@ const kBodyText1Black = TextStyle(
     fontWeight: FontWeight.w600,
     fontSize: 14);
 
+const kNameText =  TextStyle(
+    color: kBlackColor,
+    fontFamily: kFontFamily,
+    fontWeight: FontWeight.w600,
+    fontSize: 20
+);
 const kHintText = TextStyle(
   color: Color(0xFF57636C),
   fontFamily: kFontFamily,

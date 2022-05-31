@@ -1,14 +1,25 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
+import 'package:sudoku/consts.dart';
+import 'package:sudoku/models/StatisticsModel.dart';
+import 'package:sudoku/screens/CreatedGames.dart';
+import 'package:sudoku/screens/GameDifficulty.dart';
 import 'package:sudoku/screens/Home.dart';
 import 'package:sudoku/screens/themes.dart';
 import 'package:sudoku/widgets/Keypad.dart';
 import 'package:sudoku/widgets/SudokuBoard.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:sudoku/widgets/SudokuChangeNotifier.dart';
-import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 class GamePageWidget extends StatefulWidget {
-  const GamePageWidget({Key key}) : super(key: key);
+  final String difficulty;
+
+  const GamePageWidget({required this.difficulty, Key? key}) : super(key: key);
 
   @override
   _GamePageWidgetState createState() => _GamePageWidgetState();
@@ -19,8 +30,8 @@ class _GamePageWidgetState extends State<GamePageWidget> {
   final StopWatchTimer _stopWatchTimer = StopWatchTimer(
     mode: StopWatchMode.countUp,
   );
-
-  final _scrollController = ScrollController();
+  bool complete = false;
+  final LocalStorage storage = LocalStorage('localStorage');
 
   @override
   void dispose() async {
@@ -52,7 +63,7 @@ class _GamePageWidgetState extends State<GamePageWidget> {
           child: GestureDetector(
             onTap: () => FocusScope.of(context).unfocus(),
             child: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
+              padding: EdgeInsetsDirectional.fromSTEB(20, 10, 20, 0),
               child: StreamBuilder<int>(
                   stream: _stopWatchTimer.secondTime,
                   initialData: _stopWatchTimer.secondTime.value,
@@ -124,6 +135,11 @@ class _GamePageWidgetState extends State<GamePageWidget> {
                                     MainAxisAlignment.spaceAround,
                                 children: [newPuzzleButton(), resetButton()],
                               ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  0, 15, 0, 0),
+                              child: finishButton(),
                             )
                           ],
                         ),
@@ -178,5 +194,145 @@ class _GamePageWidgetState extends State<GamePageWidget> {
         ),
       );
     }));
+  }
+
+  Widget finishButton() {
+    return (Consumer<SudokuChangeNotifier>(
+        builder: (context, sudokuChangeNotifier, child) {
+      return SizedBox(
+        width: 150,
+        height: 40,
+        child: ElevatedButton(
+          onPressed: () {
+            complete = Provider.of<SudokuChangeNotifier>(context, listen: false)
+                .checkComplete();
+            if (complete) {
+              bool correct =
+                  Provider.of<SudokuChangeNotifier>(context, listen: false)
+                      .checkCorrect();
+              if (correct) {
+                _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
+                updateStats(_stopWatchTimer.rawTime.value);
+                showDialog(
+                    context: context,
+                    barrierDismissible: true,
+                    builder: (_) => puzzleCompleteCorrect());
+              } else {
+                showDialog(
+                    context: context,
+                    barrierDismissible: true,
+                    builder: (_) => puzzleCompleteIncorrect());
+              }
+            } else {
+              showDialog(
+                  context: context,
+                  barrierDismissible: true,
+                  builder: (_) => puzzleIncomplete());
+            }
+          },
+          child: Text('Finish game'),
+          style: kHomeButtonStyle,
+        ),
+      );
+    }));
+  }
+
+  Widget puzzleCompleteCorrect() {
+    return AlertDialog(
+      title: Text('Good job, puzzle complete!'),
+      actions: [
+        TextButton(
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePageWidget(),
+                ),
+              );
+            },
+            child: Text('Home page', style: kDialogText)),
+        TextButton(
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => GameDifficultyWidget(),
+                ),
+              );
+            },
+            child: Text('New game',
+                style: kDialogText.copyWith(fontWeight: FontWeight.w600)))
+      ],
+      titleTextStyle: kBodyText1Black.copyWith(fontSize: 20),
+    );
+  }
+
+  Widget puzzleCompleteIncorrect() {
+    return AlertDialog(
+      title: Text('Ops, looks like some numbers are placed incorrectly'),
+      actions: [
+        TextButton(
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePageWidget(),
+                ),
+              );
+            },
+            child: Text('Home page', style: kDialogText)),
+        TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Back to the game',
+                style: kDialogText.copyWith(fontWeight: FontWeight.w600)))
+      ],
+      titleTextStyle: kBodyText1Black.copyWith(fontSize: 20),
+    );
+  }
+
+  Widget puzzleIncomplete() {
+    return AlertDialog(
+      title: Text('Puzzle not yet complete'),
+      actions: [
+        TextButton(
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePageWidget(),
+                ),
+              );
+            },
+            child: Text('Quit anyway', style: kDialogText)),
+        TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Back to the game',
+                style: kDialogText.copyWith(fontWeight: FontWeight.w600)))
+      ],
+      titleTextStyle: kBodyText1Black.copyWith(fontSize: 20),
+    );
+  }
+
+  void updateStats(time) async {
+    String bestTimeKey = 'best_time_${widget.difficulty}';
+    String gamesNumberKey = 'games_number_${widget.difficulty}';
+    Uri url =
+        Uri.parse('$kUrl/statistics/${storage.getItem('userId').toString()}/');
+    Map<String, String>? headers = {
+      'Authorization': 'Bearer ${storage.getItem('token')}'
+    };
+    dynamic response = await http.get(url, headers: headers);
+    dynamic stats = StatisticsModel.fromJson(json.decode(response.body));
+    int gamesNumber = stats.gamesNumberMedium;
+    print(url);
+    print(headers);
+    print(gamesNumber);
+    print(time);
+    await http.patch(url, headers: headers, body: {
+      'games_number_medium': "1",
+      'best_time_${widget.difficulty}': "02:08",
+    });
+    await http.patch(Uri.parse('$kUrl/user/${storage.getItem('userId')}'),
+        headers: headers, body: {'xp': (storage.getItem('xp') + 10)});
   }
 }

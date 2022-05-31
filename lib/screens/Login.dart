@@ -1,11 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+import 'package:localstorage/localstorage.dart';
+import 'package:sudoku/consts.dart';
+import 'package:sudoku/models/UserModel.dart';
 import 'package:sudoku/screens/Home.dart';
 import 'package:sudoku/screens/Register.dart';
 import 'package:sudoku/screens/themes.dart';
 
 class LoginPageWidget extends StatefulWidget {
-  const LoginPageWidget({Key key}) : super(key: key);
+  const LoginPageWidget({Key? key}) : super(key: key);
 
   @override
   _LoginPageWidgetState createState() => _LoginPageWidgetState();
@@ -13,14 +18,15 @@ class LoginPageWidget extends StatefulWidget {
 
 class _LoginPageWidgetState extends State<LoginPageWidget>
     with TickerProviderStateMixin {
-  TextEditingController emailAddressController;
-  TextEditingController passwordController;
+  late TextEditingController emailAddressController;
+  late TextEditingController passwordController;
+  final LocalStorage storage = LocalStorage('localStorage');
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-
     emailAddressController = TextEditingController();
     passwordController = TextEditingController();
   }
@@ -42,43 +48,43 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
               children: [
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20),
-                  child: Text(
-                    'Welcome back!',
-                    textAlign: TextAlign.center,
-                    style: kBodyText1White.copyWith(fontSize: 30)
-                  ),
+                  child: Text('Welcome back!',
+                      textAlign: TextAlign.center,
+                      style: kBodyText1White.copyWith(fontSize: 30)),
                 ),
-                TextFormField(
-                  controller: emailAddressController,
-                  obscureText: false,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    labelText: 'Email Address',
-                    labelStyle: kHintText,
-                    floatingLabelStyle: TextStyle(color:Colors.white),
-                    floatingLabelBehavior: FloatingLabelBehavior.never,
-                    hintText: 'Enter your email...',
-                    hintStyle: kHintText,
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0xFFDBE2E7),
-                        width: 2,
+                Form(
+                  key: _formKey,
+                  child: TextFormField(
+                      controller: emailAddressController,
+                      obscureText: false,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        labelText: 'Email Address',
+                        labelStyle: kHintText,
+                        floatingLabelStyle: TextStyle(color: Colors.white),
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        hintText: 'Enter your email...',
+                        hintStyle: kHintText,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xFFDBE2E7),
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xFFDBE2E7),
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                        contentPadding:
+                            EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
                       ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0xFFDBE2E7),
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
-                    contentPadding:
-                    EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
-                  ),
-                  style: kHintText
+                      style: kHintText),
                 ),
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
@@ -87,11 +93,10 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                     obscureText: true,
                     autocorrect: false,
                     decoration: InputDecoration(
-
                       labelText: 'Password',
-                      labelStyle:kHintText,
+                      labelStyle: kHintText,
                       hintText: 'Enter your password...',
-                      hintStyle:kHintText,
+                      hintStyle: kHintText,
                       floatingLabelBehavior: FloatingLabelBehavior.never,
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
@@ -110,7 +115,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                       filled: true,
                       fillColor: Colors.white,
                       contentPadding:
-                      EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
+                          EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
                     ),
                     style: kHintText,
                   ),
@@ -136,12 +141,32 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                       padding: EdgeInsetsDirectional.fromSTEB(150, 10, 0, 0),
                       child: ElevatedButton(
                         onPressed: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HomePageWidget(),
-                            ),
-                          );
+                          if (_formKey.currentState!.validate()) {
+                            final email = emailAddressController.text;
+                            final password = passwordController.text;
+                            final url = Uri.parse('$kUrl/user/token/');
+                            final headers = {
+                              "Content-type": "application/json",
+                            };
+                            final response = await http.post(url,
+                                headers: headers,
+                                body: jsonEncode(
+                                    UserModel(email: email, password: password)
+                                        .toMap()));
+                            if (response.statusCode == 200) {
+                              await storage.setItem(
+                                  'token', jsonDecode(response.body)['access']);
+
+                              print("!!!");
+                              print(storage.getItem('token'));
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HomePageWidget(),
+                                ),
+                              );
+                            }
+                          }
                         },
                         child: Text('Enter'),
                         style: kHomeButtonStyle,
@@ -150,7 +175,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                   ],
                 ),
               ],
-            )
+            ),
           ),
         ),
       ),

@@ -4,7 +4,7 @@ import 'package:sudoku/screens/Home.dart';
 import 'package:sudoku/screens/themes.dart';
 
 class GameDifficultyWidget extends StatefulWidget {
-  const GameDifficultyWidget({Key key}) : super(key: key);
+  const GameDifficultyWidget({Key? key}) : super(key: key);
 
   @override
   _GameDifficultyWidgetState createState() => _GameDifficultyWidgetState();
@@ -61,7 +61,7 @@ class _GameDifficultyWidgetState extends State<GameDifficultyWidget> {
     );
   }
 
-  Widget difficultyButton(text, color) {
+  Widget difficultyButton(difficulty, color) {
     return SizedBox(
       width: 100,
       height: 40,
@@ -70,11 +70,14 @@ class _GameDifficultyWidgetState extends State<GameDifficultyWidget> {
           await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => GamePageWidget(),
+              builder: (context) => GamePageWidget(difficulty: difficulty),
             ),
           );
         },
-        child: Text(text, style: kButtonText1.copyWith(color:color),),
+        child: Text(
+          difficulty,
+          style: kButtonText1.copyWith(color: color),
+        ),
         style: kDifficultyButtonStyle,
       ),
     );

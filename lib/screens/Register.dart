@@ -1,11 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:localstorage/localstorage.dart';
+import 'package:sudoku/consts.dart';
+import 'package:sudoku/models/UserModel.dart';
 import 'package:sudoku/screens/Home.dart';
 import 'package:sudoku/screens/Login.dart';
 import 'package:sudoku/screens/themes.dart';
+import 'package:http/http.dart' as http;
 
 class RegisterPageWidget extends StatefulWidget {
-  const RegisterPageWidget({Key key}) : super(key: key);
+  const RegisterPageWidget({Key? key}) : super(key: key);
 
   @override
   _RegisterPageWidgetState createState() => _RegisterPageWidgetState();
@@ -13,16 +19,19 @@ class RegisterPageWidget extends StatefulWidget {
 
 class _RegisterPageWidgetState extends State<RegisterPageWidget>
     with TickerProviderStateMixin {
-  TextEditingController nickNameController;
-  TextEditingController emailAddressController;
-  TextEditingController passwordController;
+  late TextEditingController firstNameController;
+  late TextEditingController emailAddressController;
+  late TextEditingController passwordController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _formKey = GlobalKey<FormState>();
+  final LocalStorage storage = LocalStorage('localStorage');
+
 
   @override
   void initState() {
     super.initState();
 
-    nickNameController = TextEditingController();
+    firstNameController = TextEditingController();
     emailAddressController = TextEditingController();
     passwordController = TextEditingController();
   }
@@ -44,56 +53,56 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget>
                 children: [
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20),
-                    child: Text(
-                        'Welcome to Sudoku the Game!',
+                    child: Text('Welcome to Sudoku the Game!',
                         textAlign: TextAlign.center,
-                        style: kBodyText1White.copyWith(fontSize: 30)
-                    ),
+                        style: kBodyText1White.copyWith(fontSize: 30)),
                   ),
-                  TextFormField(
-                      controller: nickNameController,
-                      obscureText: false,
-                      keyboardType: TextInputType.name,
-                      decoration: InputDecoration(
-                        labelText: 'First Name',
-                        labelStyle: kHintText,
-                        floatingLabelStyle: TextStyle(color:Colors.white),
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                        hintText: 'Enter your first name...',
-                        hintStyle: kHintText,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xFFDBE2E7),
-                            width: 2,
+                  Form(
+                    key: _formKey,
+                    child: TextFormField(
+                        controller: firstNameController,
+                        obscureText: false,
+                        keyboardType: TextInputType.name,
+                        decoration: InputDecoration(
+                          labelText: 'First Name',
+                          labelStyle: kHintText,
+                          floatingLabelStyle: TextStyle(color: Colors.white),
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                          hintText: 'Enter your first name...',
+                          hintStyle: kHintText,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0xFFDBE2E7),
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
                           ),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xFFDBE2E7),
-                            width: 2,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0xFFDBE2E7),
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
                           ),
-                          borderRadius: BorderRadius.circular(8),
+                          filled: true,
+                          fillColor: Colors.white,
+                          contentPadding:
+                              EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
                         ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        contentPadding:
-                        EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
-                      ),
-                      style: kHintText
+                        style: kHintText),
                   ),
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                     child: TextFormField(
+                      keyboardType: TextInputType.emailAddress,
                       controller: emailAddressController,
-                      obscureText: true,
+                      obscureText: false,
                       autocorrect: false,
                       decoration: InputDecoration(
-
                         labelText: 'Email Address',
-                        labelStyle:kHintText,
+                        labelStyle: kHintText,
                         hintText: 'Enter your email address...',
-                        hintStyle:kHintText,
+                        hintStyle: kHintText,
                         floatingLabelBehavior: FloatingLabelBehavior.never,
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
@@ -112,7 +121,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget>
                         filled: true,
                         fillColor: Colors.white,
                         contentPadding:
-                        EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
+                            EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
                       ),
                       style: kHintText,
                     ),
@@ -124,11 +133,10 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget>
                       obscureText: true,
                       autocorrect: false,
                       decoration: InputDecoration(
-
                         labelText: 'Password',
-                        labelStyle:kHintText,
+                        labelStyle: kHintText,
                         hintText: 'Enter your password...',
-                        hintStyle:kHintText,
+                        hintStyle: kHintText,
                         floatingLabelBehavior: FloatingLabelBehavior.never,
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
@@ -147,7 +155,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget>
                         filled: true,
                         fillColor: Colors.white,
                         contentPadding:
-                        EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
+                            EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
                       ),
                       style: kHintText,
                     ),
@@ -170,25 +178,53 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget>
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(220, 10, 0, 0),
+                        padding: EdgeInsetsDirectional.fromSTEB(200, 10, 0, 0),
                         child: ElevatedButton(
                           onPressed: () async {
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => HomePageWidget(),
-                              ),
-                            );
+                            if (_formKey.currentState!.validate()) {
+                              String firstName = firstNameController.text;
+                              final email = emailAddressController.text;
+                              final password = passwordController.text;
+                              var url = Uri.parse('$kUrl/user/');
+                              final headers = {
+                                "Content-type": "application/json",
+                              };
+                              var response = await http.post(url,
+                                  headers: headers,
+                                  body: jsonEncode(UserModel(
+                                          firstName: firstName,
+                                          email: email,
+                                          password: password)
+                                      .toMap()));
+                              if (response.statusCode == 201) {
+                                url = Uri.parse('$kUrl/user/token/');
+                                response = await http.post(url,
+                                    headers: headers,
+                                    body: jsonEncode(UserModel(
+                                        email: email,
+                                        password: password)
+                                        .toMap()));
+                                storage.setItem('token', jsonDecode(response.body)['access']);
+                                storage.setItem('firstName', firstName);
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HomePageWidget(),
+                                  ),
+                                );
+                              } else {
+                                throw Exception("Something went wrong");
+                              }
+                            }
                           },
-                          child: Text('Enter'),
+                          child: Text('Register'),
                           style: kHomeButtonStyle,
                         ),
                       ),
                     ],
                   ),
                 ],
-              )
-          ),
+              )),
         ),
       ),
     );

@@ -31,6 +31,7 @@ class _KeypadCellState extends State<KeypadCell> {
                     Provider.of<SudokuChangeNotifier>(context, listen: false)
                         .printNumber(widget.number);
                     print(widget.number == numberPicker.selectedNumber);
+
                   },
                   child: Text(
                     '${widget.number}',

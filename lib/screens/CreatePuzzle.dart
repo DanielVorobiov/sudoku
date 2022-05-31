@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
+import 'package:sudoku/screens/CreatedGames.dart';
 import 'package:sudoku/screens/Home.dart';
 import 'package:sudoku/screens/themes.dart';
 import 'package:sudoku/widgets/Keypad.dart';
@@ -8,7 +9,7 @@ import 'package:sudoku/widgets/SudokuBoard.dart';
 import 'package:sudoku/widgets/SudokuChangeNotifier.dart';
 
 class CreateGamePageWidget extends StatefulWidget {
-  const CreateGamePageWidget({Key key}) : super(key: key);
+  const CreateGamePageWidget({Key? key}) : super(key: key);
 
   @override
   _CreateGamePageWidgetState createState() => _CreateGamePageWidgetState();
@@ -108,6 +109,8 @@ class _CreateGamePageWidgetState extends State<CreateGamePageWidget> {
         height: 40,
         child: ElevatedButton(
           onPressed: () {
+            Provider.of<SudokuChangeNotifier>(context, listen: false)
+                .saveBoard();
             showDialog(
                 context: context,
                 barrierDismissible: true,
@@ -121,7 +124,6 @@ class _CreateGamePageWidgetState extends State<CreateGamePageWidget> {
   }
 
   Widget resetButton() {
-
     return (Consumer<SudokuChangeNotifier>(
         builder: (context, sudokuChangeNotifier, child) {
       return SizedBox(
@@ -144,9 +146,24 @@ class _CreateGamePageWidgetState extends State<CreateGamePageWidget> {
       title: Text('Puzzle created successfully'),
       actions: [
         TextButton(
-            onPressed: () {}, child: Text('Home page', style: kDialogText)),
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePageWidget(),
+                ),
+              );
+            },
+            child: Text('Home page', style: kDialogText)),
         TextButton(
-            onPressed: () {},
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CreatedGamesWidget(),
+                ),
+              );
+            },
             child: Text('Check it out',
                 style: kDialogText.copyWith(fontWeight: FontWeight.w600)))
       ],
