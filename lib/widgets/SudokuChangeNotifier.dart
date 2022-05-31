@@ -34,7 +34,7 @@ class SudokuChangeNotifier with ChangeNotifier {
   List<List<dynamic>> eliminator(board) {
     final random = new Random();
     solver.fillBoard(board);
-    int emptyCells = 55;
+    int emptyCells = 20;
     while (emptyCells > 0) {
       int r = random.nextInt(9);
       int c = random.nextInt(9);

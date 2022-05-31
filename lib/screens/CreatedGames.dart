@@ -154,10 +154,7 @@ class _CreatedGamesWidgetState extends State<CreatedGamesWidget> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text(
-                          '${puzzle.complexity}',
-                          style: kStatsBodyText,
-                        ),
+
                         Text(
                           '${puzzle.createdOn}',
                           style: kBodyText1Black,

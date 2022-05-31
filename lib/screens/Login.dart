@@ -156,6 +156,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                             if (response.statusCode == 200) {
                               await storage.setItem(
                                   'token', jsonDecode(response.body)['access']);
+                              await storage.setItem('userId', jsonDecode(response.body)['id']);
 
                               print("!!!");
                               print(storage.getItem('token'));

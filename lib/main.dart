@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sudoku/screens/Home.dart';
 import 'package:sudoku/screens/Login.dart';
 import 'package:sudoku/widgets/SudokuChangeNotifier.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
+    SystemUiOverlay.bottom,
+  ]);
   runApp(MyApp());
 }
 

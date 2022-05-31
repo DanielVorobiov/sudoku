@@ -332,7 +332,9 @@ class _GamePageWidgetState extends State<GamePageWidget> {
       'games_number_medium': "1",
       'best_time_${widget.difficulty}': "02:08",
     });
-    await http.patch(Uri.parse('$kUrl/user/${storage.getItem('userId')}'),
-        headers: headers, body: {'xp': (storage.getItem('xp') + 10)});
+    int xp = (storage.getItem('xp') + 10);
+    print(xp);
+    await http.patch(Uri.parse('$kUrl/user/${storage.getItem('userId').toString()}'),
+        headers: headers, body: {'xp': xp});
   }
 }

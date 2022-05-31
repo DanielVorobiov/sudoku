@@ -9,6 +9,7 @@ import 'package:sudoku/screens/Community.dart';
 import 'package:sudoku/screens/CreatePuzzle.dart';
 import 'package:sudoku/screens/CreatedGames.dart';
 import 'package:sudoku/screens/GameDifficulty.dart';
+import 'package:sudoku/screens/Login.dart';
 import 'package:sudoku/screens/Statistics.dart';
 import 'package:sudoku/screens/themes.dart';
 
@@ -120,7 +121,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      Container(), //Login widget
+                                      LoginPageWidget(), //Login widget
                                 ),
                               );
                             },
