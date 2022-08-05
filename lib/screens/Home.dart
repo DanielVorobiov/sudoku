@@ -35,7 +35,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       await storage.setItem('userId', user.id);
       await storage.setItem('level', user.level);
       await storage.setItem('xp', user.xp);
-      await storage.setItem('firstName', user.firstName);
+      await storage.setItem('firstName', user.nickname);
       return user;
     } else {
       throw Exception('Unexpected error occurred!');

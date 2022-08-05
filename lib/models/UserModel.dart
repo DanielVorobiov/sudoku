@@ -1,6 +1,6 @@
 class UserModel {
   int? id;
-  String? firstName;
+  String? nickname;
 
   // String? lastName;
   String email;
@@ -10,7 +10,7 @@ class UserModel {
 
   UserModel(
       {this.id,
-      this.firstName,
+      this.nickname,
       required this.email,
       this.password,
       this.level,
@@ -19,14 +19,14 @@ class UserModel {
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
         id: json['id'],
-        firstName: json['first_name'],
+        nickname: json['nickname'],
         email: json['email'],
         level: json['level'],
         xp: json['xp']);
   }
 
   Map toMap() => {
-        'first_name': firstName,
+        'nickname': nickname,
         'email': email,
         'password': password,
       };

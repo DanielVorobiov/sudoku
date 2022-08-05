@@ -138,7 +138,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                   MaterialPageRoute(
                     builder: (context) => StatsPageWidget(
                       userId: user.id,
-                      firstName: user.firstName,
+                      firstName: user.nickname,
                       level: user.level,
                       xp: user.xp,
                     ),
@@ -158,7 +158,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text('${user.firstName}', style: kNameText),
+                          Text('${user.nickname}', style: kNameText),
                         ],
                       ),
                     ),
